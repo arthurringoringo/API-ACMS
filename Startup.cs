@@ -11,9 +11,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using APIACMS.Infrastructure.DataContext;
-using APIACMS.Infrastructure.DbExtension;
+//using APIACMS.Infrastructure.DataContext
+using ACMS.DAL.DataContext;
+using ACMS.DAL.DbExtension;
 using System.Reflection;
+
 
 namespace APIACMS
 {
@@ -30,12 +32,12 @@ namespace APIACMS
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //TODO add Db Context
+            
             services.AddDbContext<APIDbContext>(
                    e =>
                    {
                        e.EnableSensitiveDataLogging();
-                       e.UseSqlServer(Configuration["MSSQL_CONNECTIONSTRING"],
+                       e.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
                        sqlOptions =>
                        {
                            sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
@@ -63,8 +65,8 @@ namespace APIACMS
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //AutomigrateDatabase Disabled for now
-            //app.UpdateDatabase();
+         
+            app.UpdateDatabase();
 
             if (env.IsDevelopment())
             {
