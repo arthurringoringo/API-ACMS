@@ -11,17 +11,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-//using APIACMS.Infrastructure.DataContext
 using ACMS.DAL.DataContext;
 using ACMS.DAL.DbExtension;
+using APIACMS.Extension;
 using System.Reflection;
+
 
 
 namespace APIACMS
 {
     public class Startup
-    {//private const string AllowOrigins = "*";
-        readonly string MyPolicyName = "_MyPolicyName";
+
+    {
+        private const string AllowOrigins = "*";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -32,7 +35,8 @@ namespace APIACMS
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
+            services.AddRepositoryCollection()
+                    .AddServiceCollection();
             services.AddDbContext<APIDbContext>(
                    e =>
                    {
@@ -47,15 +51,16 @@ namespace APIACMS
                    });
             services.AddCors(options =>
             {
-                options.AddPolicy(MyPolicyName,
+                options.AddPolicy(AllowOrigins,
                 builder =>
                 {
-                    builder.AllowAnyOrigin()
+                    builder.WithOrigins(AllowOrigins)
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
             });
 
+            services.AddSwaggerGen();
 
 
 
@@ -68,12 +73,19 @@ namespace APIACMS
          
             app.UpdateDatabase();
 
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ACMS API V1");
+                
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors(MyPolicyName);
+            app.UseCors(AllowOrigins);
             app.UseHttpsRedirection();
             app.UseRouting();
 
