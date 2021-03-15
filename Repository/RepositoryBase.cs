@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ACMS.DAL.DataContext;
 using ACMS.DAL.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace APIACMS.Repository
 {
@@ -23,7 +24,7 @@ namespace APIACMS.Repository
             return _context.Set<T>().AsNoTracking();
         }
 
-        public IQueryable<T> FinByCondition(Expression<Func<T, bool>> expression)
+        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression)
         {
             return _context.Set<T>().Where(expression).AsNoTracking();
         }
@@ -57,7 +58,10 @@ namespace APIACMS.Repository
             }
             catch (Exception e)
             {
-                throw new InvalidOperationException(nameof(e));
+                throw new InvalidOperationException(e.ToString());
+
+
+
             }
         }
         public bool Delete(T entity)
@@ -74,7 +78,7 @@ namespace APIACMS.Repository
             }
             catch (Exception e)
             {
-                throw new InvalidOperationException(nameof(e));
+                throw new InvalidOperationException(e.ToString());
 
             }
         }

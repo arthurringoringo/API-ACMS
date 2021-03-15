@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using APIACMS.Repository;
 using APIACMS.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
 
@@ -30,7 +31,11 @@ namespace APIACMS.Extension
 
         public static IServiceCollection AddServiceCollection(this IServiceCollection services)
         {
+            services.AddTransient<IServiceExtension, ServiceExtension>();
             services.AddTransient<IStudentServices, StudentServices>();
+            services.AddTransient<IAdminServices, AdminServices>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             return services;
         }
     }
