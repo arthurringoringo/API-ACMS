@@ -102,9 +102,9 @@ namespace APIACMS.Controllers
 
         [HttpGet("AvailableClass/get/{id}")]
         [DisableRequestSizeLimit]
-        public IActionResult GetAvailableClass(Guid id)
+        public IActionResult GetAvailableClass([FromRoute] Guid id)
         {
-            var result = _adminServices.GetAvailableClassesByCondition(x =>x.ClassId == id);
+            var result = _adminServices.GetAvailableClassesWithExpressionAndFkData(id);
 
             return Ok(result);
         }

@@ -72,6 +72,13 @@ namespace APIACMS.Services
         public IQueryable<Teacher> GetTeacherByCondition(Expression<Func<Teacher, bool>> expression);
 
         public AvailableClass GetAvailableClassesWithExpressionAndFkData(Guid id);
+        public ClassCategory GetClassCategoryWithExpressionAndFkData(Guid id);
+        public PaidSession GetPaidSessionWithExpressionAndFkData(Guid id);
+        public PaymentMethod GetPaymentMethodWithExpressionAndFkData(Guid id);
+        public RegistredClass GetRegistredClassWithExpressionAndFkData(Guid id);
+        public SessionSchedule GetSessionSchedulesWithExpressionAndFkData(Guid id);
+        public Student GetStudentsWithExpressionAndFkData(Guid id);
+        public Teacher GetTeacherWithExpressionAndFkData(Guid id);
 
         //
         //BissLogic

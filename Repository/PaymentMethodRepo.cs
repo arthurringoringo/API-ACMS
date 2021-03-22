@@ -4,17 +4,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using ACMS.DAL.Models;
 using ACMS.DAL.DataContext;
-
-
+using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace APIACMS.Repository
 {
     public class PaymentMethodRepo : RepositoryBase<PaymentMethod>, IPaymentMethodRepo
     {
-        public PaymentMethodRepo(APIDbContext _context)
-            : base(_context)
+        private readonly APIDbContext _context;
+        public PaymentMethodRepo(APIDbContext context)
+            : base(context)
         {
-
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+        }
+        public PaymentMethod FindByConditionWithFKData(Expression<Func<PaymentMethod, bool>> expression)
+        {
+            return _context.Set<PaymentMethod>()
+                .AsNoTracking()
+                .Include(x => x.RegistredClasses)
+                .Where(expression)
+                .FirstOrDefault();
         }
     }
 }

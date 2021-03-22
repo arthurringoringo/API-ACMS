@@ -7,5 +7,6 @@ namespace APIACMS.Services
     {
         bool Send(EmailDto content);
         public string Upload(IFormFile image);
+        public string CreateRegistrationReplyHTML(string studentName, string instructorName, string className, string InstructorEmail, string instuctorphone);
     }
 }

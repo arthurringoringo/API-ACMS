@@ -241,6 +241,13 @@ namespace APIACMS.Services
             return result;
         }
 
+        public ClassCategory GetClassCategoryWithExpressionAndFkData(Guid id)
+        {
+            var result = _classCategoryRepo.FindByConditionWithFKData(x => x.CategoryId == id);
+
+            return result;
+        }
+
         public IQueryable<ClassReport> GetClassReport()
         {
             var result = _classReportRepo.FindAll();
@@ -269,6 +276,20 @@ namespace APIACMS.Services
             return result;
         }
 
+        public PaidSession GetPaidSessionWithExpressionAndFkData(Guid id)
+        {
+            var result = _paidSessionRepo.FindByConditionWithFKData(x => x.PaidSessionId == id);
+
+            return result;
+        }
+
+        public PaymentMethod GetPaymentMethodWithExpressionAndFkData(Guid id)
+        {
+            var result = _paymentMethodRepo.FindByConditionWithFKData(x => x.PaymentMethodId == id);
+
+            return result;
+        }
+
         public IQueryable<RegistredClass> GetRegistredClass()
         {
             var result = _registeredClassRepo.FindAll();
@@ -279,6 +300,13 @@ namespace APIACMS.Services
         public IQueryable<RegistredClass> GetRegistredClassByCondition(Expression<Func<RegistredClass, bool>> expression)
         {
             var result = _registeredClassRepo.FindByCondition(expression);
+
+            return result;
+        }
+
+        public RegistredClass GetRegistredClassWithExpressionAndFkData(Guid id)
+        {
+            var result = _registeredClassRepo.FindByConditionWithFKData(x => x.RegistredClassId == id);
 
             return result;
         }
@@ -297,6 +325,13 @@ namespace APIACMS.Services
             return result;
         }
 
+        public SessionSchedule GetSessionSchedulesWithExpressionAndFkData(Guid id)
+        {
+            var result = _sessionScheduledRepo.FindByConditionWithFKData(x => x.ScheduleId == id);
+
+            return result;
+        }
+
         public IQueryable<Student> GetStudent()
         {
             var result = _studentRepo.FindAll();
@@ -311,6 +346,13 @@ namespace APIACMS.Services
             return result;
         }
 
+        public Student GetStudentsWithExpressionAndFkData(Guid id)
+        {
+            var result = _studentRepo.FindByConditionWithFKData(x => x.StudentId == id);
+
+            return result;
+        }
+
         public IQueryable<Teacher> GetTeacher()
         {
             var result = _teacherRepo.FindAll();
@@ -321,6 +363,13 @@ namespace APIACMS.Services
         public IQueryable<Teacher> GetTeacherByCondition(Expression<Func<Teacher, bool>> expression)
         {
             var result = _teacherRepo.FindByCondition(expression);
+
+            return result;
+        }
+
+        public Teacher GetTeacherWithExpressionAndFkData(Guid id)
+        {
+            var result = _teacherRepo.FindByConditionWithFKData(x => x.TeacherId == id);
 
             return result;
         }

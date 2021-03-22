@@ -11,6 +11,7 @@ using ACMS.DAL.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Net.Http.Headers;
+using System.Text;
 
 namespace APIACMS.Services
 {
@@ -30,13 +31,9 @@ namespace APIACMS.Services
         {
             _configuration = configuration;
 
-            //_emailAddress = _configuration.GetValue<string>("EmailConfiguration:EmailAddress");
+            _emailAddress = _configuration.GetValue<string>("EmailConfiguration:Email");
 
-            //_emailPassword = _configuration.GetValue<string>("EmailConfiguration:Emailpassword");
-
-            _emailAddress = "201700143@my.apiu.edu";
-
-            _emailPassword = "@iloveyouverent22";
+            _emailPassword = _configuration.GetValue<string>("EmailConfiguration:Password");
 
             _smtpHost = "smtp.office365.com";
 
@@ -52,9 +49,14 @@ namespace APIACMS.Services
 
             email.To.Add(MailboxAddress.Parse(content.To));
 
+            email.Cc.Add(MailboxAddress.Parse(content.Cc));
+
             email.Subject = content.Subject;
 
             email.Body = new TextPart(TextFormat.Html) { Text = content.Body };
+
+
+
 
             #endregion
 
@@ -108,5 +110,23 @@ namespace APIACMS.Services
             }
 
         }
+
+        public string CreateRegistrationReplyHTML(string studentName, string instructorName, string className, string InstructorEmail, string instuctorphone)
+        {
+            return " Dear "+studentName+",<br><br>This email is to confirm your registration at AIU Community Music School" +
+                "<table><tr> <td> Name:</td><td> " + studentName + "</td></tr><tr><td> Instument:</td><td>" + className + " </td>" +
+                "</tr> <tr><td> Instructor:</td> <td> " + instructorName + " </td> </tr> <tr><td> Instructor's Email:</td>" +
+                "<td> " + InstructorEmail + " </td> </tr> <tr><td> Instructor's Phone Number:</td> <td> " + instuctorphone + " </td>" +
+                "</tr></table><br> Please contact your teacher through email or phone to arrange for assessment and schedule.<br>" +
+                "After doing so, kindly proceed to pay and send the receipt to us through email or website." +
+                " <br><span style = \"color: red;\"><strong> Don't forget to indicate in back note: AIU Community Music School</strong></span>" +
+                "<br> <br> Then you can start your lesson.<br><br> We are excited to have you with us. <br> <br> Sincerly,<br>  <br>" +
+                " <br> The AIU Community Music School Team <style>  table, th, td {  border: 1px solid black;border - collapse: collapse; padding: 10px;" +
+                " } </style> ";
+            
+
+            
+        }
+      
     }
 }

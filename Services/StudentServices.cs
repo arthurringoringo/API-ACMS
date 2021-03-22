@@ -18,6 +18,8 @@ namespace APIACMS.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IPaidSessionRepo _paidSessionRepo;
         private readonly IClassCategoryRepo _classCategoryRepo;
+        private readonly ITeacherRepo _teacherRepo;
+        private readonly IAvailableClassRepo  _availableClassRepo;
 
 
 
@@ -27,7 +29,9 @@ namespace APIACMS.Services
                                IServiceExtension serviceExtension,
                                IHttpContextAccessor httpContextAccessor,
                                IPaidSessionRepo paidSessionRepo,
-                               IClassCategoryRepo classCategory)
+                               IClassCategoryRepo classCategory,
+                               ITeacherRepo teacherRepo,
+                               IAvailableClassRepo availableClassRepo)
         {
             _studentRepo = studentRepo ?? throw new ArgumentNullException(nameof(studentRepo));
             _registredClassRepo = registredClassRepo ?? throw new ArgumentNullException(nameof(registredClassRepo));
@@ -35,6 +39,8 @@ namespace APIACMS.Services
             _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
             _paidSessionRepo = paidSessionRepo ?? throw new ArgumentNullException(nameof(paidSessionRepo));
             _classCategoryRepo = classCategory ?? throw new ArgumentNullException(nameof(classCategory));
+            _teacherRepo = teacherRepo ?? throw new ArgumentNullException(nameof(teacherRepo));
+            _availableClassRepo = availableClassRepo ?? throw new ArgumentNullException(nameof(availableClassRepo));
         }
 
 
@@ -44,7 +50,7 @@ namespace APIACMS.Services
             model.CreatedOn = DateTime.Now;
 
             var result = _studentRepo.Create(model);
-
+            //email confirmation is on client side
             if (result == model)
             {
 
@@ -66,8 +72,20 @@ namespace APIACMS.Services
             model.DateRegistered = DateTime.Now;
             var result = _registredClassRepo.Create(model);
 
-            //Email notification for student and Teacher
-            // find ways to store list of date and time
+
+            var student = _studentRepo.FindByConditionWithFKData(x => x.StudentId == model.StudentId);
+            var classObject = _availableClassRepo.FindByCondition(x => x.ClassId == model.ClassId).FirstOrDefault();
+            var teacherObject = _teacherRepo.FindByConditionWithFKData(x => x.TeacherId == classObject.TeacherId);
+
+            var registrationReply = new EmailDto();
+            registrationReply.Body = _serviceExtension.CreateRegistrationReplyHTML(student.FirstName + student.LastName, teacherObject.FirstName + teacherObject, classObject.ClassName, teacherObject.User.Email, teacherObject.User.PhoneNumber);
+            //registrationReply.Body = "Dear Student, <br><br> <h1> Thank you</h1>";
+            registrationReply.To = student.User.Email;
+            registrationReply.Subject = "ACMS Class Registration";
+            registrationReply.Cc = teacherObject.User.Email;
+            _serviceExtension.Send(registrationReply);
+
+             // find ways to store list of date and time
             // for Day row and time row
 
             if (result != model)
