@@ -28,8 +28,16 @@ namespace APIACMS.Repository
                 .Include(d => d.RegistredClasses)
                 .Include(d => d.SessionSchedules)
                 .Include(d => d.Teacher)
+                .ThenInclude(d => d.User)
                 .Where(expression)
                 .FirstOrDefault();
+        }
+        public List<AvailableClass> FindAllWithFKData()
+        {
+            return _context.Set<AvailableClass>()
+                .AsNoTracking()
+                .Include(d => d.Teacher)
+                .ToList();
         }
 
     }

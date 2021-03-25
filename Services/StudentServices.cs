@@ -3,6 +3,7 @@ using APIACMS.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
@@ -20,6 +21,7 @@ namespace APIACMS.Services
         private readonly IClassCategoryRepo _classCategoryRepo;
         private readonly ITeacherRepo _teacherRepo;
         private readonly IAvailableClassRepo  _availableClassRepo;
+        private readonly IPaymentMethodRepo  _paymentMethodRepo;
 
 
 
@@ -31,7 +33,8 @@ namespace APIACMS.Services
                                IPaidSessionRepo paidSessionRepo,
                                IClassCategoryRepo classCategory,
                                ITeacherRepo teacherRepo,
-                               IAvailableClassRepo availableClassRepo)
+                               IAvailableClassRepo availableClassRepo,
+                               IPaymentMethodRepo paymentMethodRepo)
         {
             _studentRepo = studentRepo ?? throw new ArgumentNullException(nameof(studentRepo));
             _registredClassRepo = registredClassRepo ?? throw new ArgumentNullException(nameof(registredClassRepo));
@@ -41,6 +44,7 @@ namespace APIACMS.Services
             _classCategoryRepo = classCategory ?? throw new ArgumentNullException(nameof(classCategory));
             _teacherRepo = teacherRepo ?? throw new ArgumentNullException(nameof(teacherRepo));
             _availableClassRepo = availableClassRepo ?? throw new ArgumentNullException(nameof(availableClassRepo));
+            _paymentMethodRepo = paymentMethodRepo ?? throw new ArgumentNullException(nameof(paymentMethodRepo));
         }
 
 
@@ -78,13 +82,13 @@ namespace APIACMS.Services
             var teacherObject = _teacherRepo.FindByConditionWithFKData(x => x.TeacherId == classObject.TeacherId);
 
             var registrationReply = new EmailDto();
-            registrationReply.Body = _serviceExtension.CreateRegistrationReplyHTML(student.FirstName + student.LastName, teacherObject.FirstName + teacherObject, classObject.ClassName, teacherObject.User.Email, teacherObject.User.PhoneNumber);
+            registrationReply.Body = _serviceExtension.CreateRegistrationReplyHTML(student.FirstName +" "+ student.LastName, teacherObject.FirstName, classObject.ClassName, teacherObject.User.Email, teacherObject.User.PhoneNumber);
             //registrationReply.Body = "Dear Student, <br><br> <h1> Thank you</h1>";
             registrationReply.To = student.User.Email;
             registrationReply.Subject = "ACMS Class Registration";
             registrationReply.Cc = teacherObject.User.Email;
             _serviceExtension.Send(registrationReply);
-
+            
              // find ways to store list of date and time
             // for Day row and time row
 
@@ -119,9 +123,13 @@ namespace APIACMS.Services
 
             string host = _httpContextAccessor.HttpContext.Request.Host.Value;
 
+            var studentObject = _studentRepo.FindByConditionWithFKData(x => x.StudentId == session.StudentId);
+            var teacherObject = _availableClassRepo.FindByConditionWithFKData(x => x.ClassId == session.ClassId);
+
             PaidSession model = new PaidSession();
 
             model.StudentId = session.StudentId;
+            model.CreatedOn = DateTime.Now;
             model.ClassId = session.ClassId;
             model.PictureLink = host + imageUrl;
             model.PaymentAccepted = null;
@@ -129,6 +137,13 @@ namespace APIACMS.Services
             model.PaymentsMonth = session.PaymentsMonth;
 
             //TODO Email notification for Student and admin and teacher
+            var registrationReply = new EmailDto();
+            registrationReply.Body = _serviceExtension.CreateUploadReieptReplyHTML();
+            registrationReply.To = studentObject.User.Email;
+            registrationReply.Subject = "ACMS Class Payment";
+            registrationReply.Cc = teacherObject.Teacher.User.Email;
+            _serviceExtension.Send(registrationReply);
+
 
             if (imageUrl == "Failed")
             {
@@ -149,8 +164,36 @@ namespace APIACMS.Services
             return result;
 
         }
+        public Student GetProfileStudentUser(int id)
+        {
+            var result = _studentRepo.FindByCondition(x => x.UserId == id).FirstOrDefault();
 
+            return result;
+
+        }
+
+        public IQueryable<ClassCategory> GetAvailableClassCategory()
+        {
+            var result = _classCategoryRepo.FindAll();
+            
+            return result;
         
+        }
+
+        public List<AvailableClass> GetAvailableClass()
+        {
+            var result = _availableClassRepo.FindAllWithFKData();
+            
+            return result;
+
+        }
+        public IQueryable<PaymentMethod> GetPaymentMethod()
+        {
+            var result = _paymentMethodRepo.FindAll();
+
+            return result;
+
+        }
 
     }
 }

@@ -52,6 +52,13 @@ namespace APIACMS.Controllers
 
             return Ok(result);
         }
+        [HttpGet("profile/user/{id}")]
+        public IActionResult GetStudentProfile(int id)
+        {
+            var result = _studentServices.GetProfileStudentUser(id);
+
+            return Ok(result);
+        }
 
         [HttpPost("class/register")]
         public IActionResult RegisterClass([FromBody] RegistredClass registerClass)
@@ -68,6 +75,27 @@ namespace APIACMS.Controllers
             var result = _studentServices.UpdateProfile(student);
 
             return Ok(student);
+        }
+        [HttpGet("classcategory")]
+        public IActionResult Getclasscategory()
+        {
+            var result = _studentServices.GetAvailableClassCategory();
+
+            return Ok(result);
+        }
+        [HttpGet("availableclass")]
+        public IActionResult GetAvailableClass()
+        {
+            var result = _studentServices.GetAvailableClass();
+
+            return Ok(result);
+        }
+        [HttpGet("paymentmethod")]
+        public IActionResult GetPaymentMethod()
+        {
+            var result = _studentServices.GetPaymentMethod();
+
+            return Ok(result);
         }
     }
 }

@@ -127,6 +127,12 @@ namespace APIACMS.Services
 
             
         }
-      
+
+
+        public string CreateUploadReieptReplyHTML()
+        {
+            return "Thankyou for the payment <br><br>Your reciept is uploaded to the system and will be reviwed during office hours." +
+                "<br><br>Sincerly, <br> <br> <br>The AIU Community Music School Team";
+        }
     }
 }
