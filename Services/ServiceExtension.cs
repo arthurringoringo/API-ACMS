@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Net.Http.Headers;
 using System.Text;
+using MailKit.Net.Imap;
 
 namespace APIACMS.Services
 {
@@ -27,6 +28,7 @@ namespace APIACMS.Services
         private readonly string _smtpHost;
 
         private readonly int _smtpPort;
+
         public ServiceExtension(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -45,11 +47,15 @@ namespace APIACMS.Services
             #region Create Email
             var email = new MimeMessage();
 
-            email.From.Add(MailboxAddress.Parse(_emailAddress));
+            
+
+            email.From.Add(MailboxAddress.Parse("ACMS@apiu.edu"));
 
             email.To.Add(MailboxAddress.Parse(content.To));
 
             email.Cc.Add(MailboxAddress.Parse(content.Cc));
+
+            email.ReplyTo.Add(MailboxAddress.Parse(_emailAddress));
 
             email.Subject = content.Subject;
 
@@ -75,7 +81,8 @@ namespace APIACMS.Services
 
                 return true;
             }
-            catch (Exception e)
+
+            catch (Exception e) 
             {
                 Console.WriteLine(e.ToString());
 
