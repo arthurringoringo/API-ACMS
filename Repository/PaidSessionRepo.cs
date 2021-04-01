@@ -21,10 +21,18 @@ namespace APIACMS.Repository
         {
             return _context.Set<PaidSession>()
                 .AsNoTracking()
-                .Include(x => x.Student)
-                .Include(x => x.Class)
+                .Include(x => x.RegistredClass)
+                .ThenInclude(x => x.Class)
                 .Where(expression)
                 .FirstOrDefault();
+        }
+        public IQueryable<PaidSession> FindAllByConditionWithFkData(Expression<Func<PaidSession, bool>> expression)
+        {
+            return _context.Set<PaidSession>()
+                .AsNoTracking()
+                .Include(x => x.RegistredClass)
+                .ThenInclude(x => x.Class)
+                .Where(expression);
         }
     }
 }

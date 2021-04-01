@@ -117,20 +117,23 @@ namespace APIACMS.Services
             }
         }
 
-        public string UploadReciept(PaidSessionDTO session)
+        public string UploadReciept(PaidSessionDTOs session)
         {
-            var imageUrl = _serviceExtension.Upload(session.Image);
+            var imageUrl = _serviceExtension.Upload(session);
 
             string host = _httpContextAccessor.HttpContext.Request.Host.Value;
 
-            var studentObject = _studentRepo.FindByConditionWithFKData(x => x.StudentId == session.StudentId);
-            var teacherObject = _availableClassRepo.FindByConditionWithFKData(x => x.ClassId == session.ClassId);
+
+            var registredClassObject = _registredClassRepo.FindAllByConditionWithFKData(x => x.RegistredClassId == new Guid(session.RegistredClassId));
+            var studentObject = _studentRepo.FindByConditionWithFKData(x => x.StudentId == registredClassObject.FirstOrDefault().StudentId);
+            var teacherObject = _availableClassRepo.FindByConditionWithFKData(x => x.ClassId == registredClassObject.FirstOrDefault().Class.ClassId);
 
             PaidSession model = new PaidSession();
 
-            model.StudentId = session.StudentId;
+            //model.StudentId = session.StudentId;
+            model.RegistredClassId = new Guid(session.RegistredClassId);
             model.CreatedOn = DateTime.Now;
-            model.ClassId = session.ClassId;
+            //model.ClassId = session.ClassId;
             model.PictureLink = host + imageUrl;
             model.PaymentAccepted = null;
             model.DatePaid = DateTime.Now;
@@ -142,7 +145,8 @@ namespace APIACMS.Services
             registrationReply.To = studentObject.User.Email;
             registrationReply.Subject = "ACMS Class Payment";
             registrationReply.Cc = teacherObject.Teacher.User.Email;
-            _serviceExtension.Send(registrationReply);
+            //WAIT UNTIL MRSTAN UNBLOCK
+            //_serviceExtension.Send(registrationReply);
 
 
             if (imageUrl == "Failed")
@@ -194,6 +198,29 @@ namespace APIACMS.Services
             return result;
 
         }
+        public IQueryable<RegistredClass> GetStudentRegistredClass(Guid id)
+        {
+            var result = _registredClassRepo.FindAllByConditionWithFKData(x=>x.StudentId == id);
+
+            return result;
+
+        }
+        public IQueryable<RegistredClass> GetStudentRegistredClassNotFullyPaid(Guid id)
+        {
+            var result = _registredClassRepo.FindAllByConditionWithFKData(x => x.StudentId == id && x.FullyPaid == null || false);
+
+            return result;
+
+        }
+
+        public IQueryable<PaidSession> GetStudentPaidSessionWithFKData(Guid id)
+        {
+            var result = _paidSessionRepo.FindAllByConditionWithFkData(x => x.RegistredClass.StudentId == id);
+
+            return result;
+
+        }
+
 
     }
 }

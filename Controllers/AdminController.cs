@@ -54,7 +54,7 @@ namespace APIACMS.Controllers
 
 
         [HttpPost("paidsession/create")]
-        public IActionResult CreatePaidSession([FromForm] PaidSessionDTO model)
+        public IActionResult CreatePaidSession([FromForm] PaidSessionDTOs model)
         {
             var result = _studentServices.UploadReciept(model);
 

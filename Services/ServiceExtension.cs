@@ -71,7 +71,7 @@ namespace APIACMS.Services
             using var smtp = new SmtpClient();
             try
             {
-                smtp.Connect(_smtpHost, _smtpPort);
+                smtp.Connect(_smtpHost, _smtpPort,true);
 
                 smtp.Authenticate(_emailAddress, _emailPassword);
 
@@ -93,19 +93,19 @@ namespace APIACMS.Services
 
         }
 
-        public string Upload(IFormFile image)
+        public string Upload(PaidSessionDTOs image)
         {
             var file = image;
             var folderName = Path.Combine("Resources", "Images", "BankReciept");
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-            if (file.Length > 0)
+            if (file.Image.Length> 0)
             {
-                var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                var fileName = image.PictureLink;
                 var fullPath = Path.Combine(pathToSave, fileName);
                 var dbPath = Path.Combine(folderName, fileName);
-                using (var stream = new FileStream(fullPath, FileMode.Create))
+                using (var stream = new FileStream(fullPath,FileMode.Create))
                 {
-                    file.CopyTo(stream);
+                    file.Image.CopyTo(stream);
                 }
                 return dbPath;
             }

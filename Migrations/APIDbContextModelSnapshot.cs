@@ -123,10 +123,6 @@ namespace APIACMS.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasMaxLength(250);
 
-                    b.Property<Guid>("ClassId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasMaxLength(250);
-
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
@@ -149,15 +145,13 @@ namespace APIACMS.Migrations
                     b.Property<string>("PictureLink")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("StudentId")
+                    b.Property<Guid>("RegistredClassId")
                         .HasColumnType("uniqueidentifier")
                         .HasMaxLength(250);
 
                     b.HasKey("PaidSessionId");
 
-                    b.HasIndex("ClassId");
-
-                    b.HasIndex("StudentId");
+                    b.HasIndex("RegistredClassId");
 
                     b.ToTable("PaidSessions");
                 });
@@ -622,18 +616,11 @@ namespace APIACMS.Migrations
 
             modelBuilder.Entity("ACMS.DAL.Models.PaidSession", b =>
                 {
-                    b.HasOne("ACMS.DAL.Models.AvailableClass", "Class")
-                        .WithMany("PaidSessions")
-                        .HasForeignKey("ClassId")
-                        .HasConstraintName("FK_PaidSessions_AvailableClasses")
+                    b.HasOne("ACMS.DAL.Models.RegistredClass", "RegistredClass")
+                        .WithMany("PaidSession")
+                        .HasForeignKey("RegistredClassId")
+                        .HasConstraintName("FK_PaidSessions_RegistredClass")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ACMS.DAL.Models.Student", "Student")
-                        .WithMany("PaidSessions")
-                        .HasForeignKey("StudentId")
-                        .HasConstraintName("FK_PaidSessions_Student")
-                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 

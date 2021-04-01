@@ -28,5 +28,16 @@ namespace APIACMS.Repository
                 .Where(expression)
                 .FirstOrDefault();
         }
+        public IQueryable<RegistredClass> FindAllByConditionWithFKData(Expression<Func<RegistredClass, bool>> expression)
+        {
+            return _context.Set<RegistredClass>()
+                .AsNoTracking()
+                .Include(x => x.Category)
+                .Include(x => x.Class).ThenInclude(x => x.Teacher)
+                .Include(x => x.PaymentMethod)
+                .Include(x => x.Student)
+                .Where(expression)
+                ;
+        }
     }
 }

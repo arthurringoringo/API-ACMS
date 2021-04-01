@@ -36,7 +36,7 @@ namespace APIACMS.Controllers
 
         [HttpPost("payment/upload/reciept")]
         [DisableRequestSizeLimit]
-        public IActionResult UploadReciept([FromForm] PaidSessionDTO session)
+        public IActionResult UploadReciept([FromForm] PaidSessionDTOs session)
         {
             var result = _studentServices.UploadReciept(session);
 
@@ -56,6 +56,27 @@ namespace APIACMS.Controllers
         public IActionResult GetStudentProfile(int id)
         {
             var result = _studentServices.GetProfileStudentUser(id);
+
+            return Ok(result);
+        }
+        [HttpGet("registred/class/{id}")]
+        public IActionResult GetStudentRegistredClass(Guid id)
+        {
+            var result = _studentServices.GetStudentRegistredClass(id);
+
+            return Ok(result);
+        }
+        [HttpGet("registred/class/notpaid/{id}")]
+        public IActionResult GetStudentRegistredClassNotPaid(Guid id)
+        {
+            var result = _studentServices.GetStudentRegistredClassNotFullyPaid(id);
+
+            return Ok(result);
+        }
+        [HttpGet("paidsession/{id}")]
+        public IActionResult GetStudentPaidSession(Guid id)
+        {
+            var result = _studentServices.GetStudentPaidSessionWithFKData(id);
 
             return Ok(result);
         }

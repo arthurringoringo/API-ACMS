@@ -21,7 +21,6 @@ namespace APIACMS.Repository
         {
             return _context.Set<Student>()
                 .AsNoTracking()
-                .Include(x => x.PaidSessions)
                 .Include(x => x.RegistredClasses)
                 .Include(x => x.SessionSchedules)
                 .Include(x => x.User)

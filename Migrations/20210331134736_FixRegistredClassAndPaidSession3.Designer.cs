@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APIACMS.Migrations
 {
     [DbContext(typeof(APIDbContext))]
-    [Migration("20210225144020_AfterEntity")]
-    partial class AfterEntity
+    [Migration("20210331134736_FixRegistredClassAndPaidSession3")]
+    partial class FixRegistredClassAndPaidSession3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -105,10 +105,15 @@ namespace APIACMS.Migrations
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("RegistredClassesRegistredClassId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Remarks")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ClassReportId");
+
+                    b.HasIndex("RegistredClassesRegistredClassId");
 
                     b.ToTable("ClassReport");
                 });
@@ -117,10 +122,6 @@ namespace APIACMS.Migrations
                 {
                     b.Property<Guid>("PaidSessionId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasMaxLength(250);
-
-                    b.Property<Guid>("ClassId")
                         .HasColumnType("uniqueidentifier")
                         .HasMaxLength(250);
 
@@ -139,19 +140,23 @@ namespace APIACMS.Migrations
                     b.Property<bool?>("PaymentAccepted")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("PaymentsMonth")
-                        .HasColumnType("date");
+                    b.Property<string>("PaymentsMonth")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("PictureLink")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("StudentId")
+                    b.Property<Guid>("RegistredClassId")
                         .HasColumnType("uniqueidentifier")
                         .HasMaxLength(250);
 
+                    b.Property<Guid?>("StudentId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("PaidSessionId");
 
-                    b.HasIndex("ClassId");
+                    b.HasIndex("RegistredClassId");
 
                     b.HasIndex("StudentId");
 
@@ -201,10 +206,6 @@ namespace APIACMS.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasMaxLength(250);
 
-                    b.Property<Guid>("ClassReportId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasMaxLength(250);
-
                     b.Property<bool>("ConfirmedByTeacher")
                         .HasColumnType("bit");
 
@@ -243,8 +244,6 @@ namespace APIACMS.Migrations
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("ClassId");
-
-                    b.HasIndex("ClassReportId");
 
                     b.HasIndex("PaymentMethodId");
 
@@ -615,21 +614,25 @@ namespace APIACMS.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ACMS.DAL.Models.ClassReport", b =>
+                {
+                    b.HasOne("ACMS.DAL.Models.RegistredClass", "RegistredClasses")
+                        .WithMany()
+                        .HasForeignKey("RegistredClassesRegistredClassId");
+                });
+
             modelBuilder.Entity("ACMS.DAL.Models.PaidSession", b =>
                 {
-                    b.HasOne("ACMS.DAL.Models.AvailableClass", "Class")
-                        .WithMany("PaidSessions")
-                        .HasForeignKey("ClassId")
-                        .HasConstraintName("FK_PaidSessions_AvailableClasses")
+                    b.HasOne("ACMS.DAL.Models.RegistredClass", "RegistredClass")
+                        .WithMany("PaidSession")
+                        .HasForeignKey("RegistredClassId")
+                        .HasConstraintName("FK_PaidSessions_RegistredClass")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ACMS.DAL.Models.Student", "Student")
+                    b.HasOne("ACMS.DAL.Models.Student", null)
                         .WithMany("PaidSessions")
-                        .HasForeignKey("StudentId")
-                        .HasConstraintName("FK_PaidSessions_Student")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("StudentId");
                 });
 
             modelBuilder.Entity("ACMS.DAL.Models.RegistredClass", b =>
@@ -645,13 +648,6 @@ namespace APIACMS.Migrations
                         .WithMany("RegistredClasses")
                         .HasForeignKey("ClassId")
                         .HasConstraintName("FK_RegistredClass_AvailableClasses")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ACMS.DAL.Models.ClassReport", "ClassReport")
-                        .WithMany("RegistredClasses")
-                        .HasForeignKey("ClassReportId")
-                        .HasConstraintName("FK_RegistredClass_ClassReport")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

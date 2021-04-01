@@ -2,7 +2,7 @@
 
 namespace APIACMS.Migrations
 {
-    public partial class AfterFkfix : Migration
+    public partial class FixRegistredClassAndPaidSession5 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
