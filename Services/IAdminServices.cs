@@ -16,6 +16,7 @@ namespace APIACMS.Services
         public bool CreatePaymentMethod(PaymentMethod model);
         public bool CreateSessionSchedule(SessionSchedule model);
         public bool CreateTeacher(Teacher model);
+       
 
         //Update && softDelete
 
@@ -57,6 +58,7 @@ namespace APIACMS.Services
         public IQueryable<ClassReport> GetClassReportByCondition(Expression<Func<ClassReport, bool>> expression);
 
         public IQueryable<PaidSession> GetPaidSession();
+        public IQueryable<PaidSession> GetPaidSessionWithFk();
         public IQueryable<PaidSession> GetPaidSessionByCondition(Expression<Func<PaidSession, bool>> expression);
 
         public IQueryable<RegistredClass> GetRegistredClass();
@@ -74,6 +76,7 @@ namespace APIACMS.Services
         public AvailableClass GetAvailableClassesWithExpressionAndFkData(Guid id);
         public ClassCategory GetClassCategoryWithExpressionAndFkData(Guid id);
         public PaidSession GetPaidSessionWithExpressionAndFkData(Guid id);
+        public IQueryable<PaymentMethod> GetPaymentMethods();
         public PaymentMethod GetPaymentMethodWithExpressionAndFkData(Guid id);
         public RegistredClass GetRegistredClassWithExpressionAndFkData(Guid id);
         public SessionSchedule GetSessionSchedulesWithExpressionAndFkData(Guid id);

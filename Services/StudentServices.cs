@@ -79,8 +79,10 @@ namespace APIACMS.Services
 
             var student = _studentRepo.FindByConditionWithFKData(x => x.StudentId == model.StudentId);
             var classObject = _availableClassRepo.FindByCondition(x => x.ClassId == model.ClassId).FirstOrDefault();
+            var catObject = _classCategoryRepo.FindByCondition(x => x.CategoryId == model.CategoryId).FirstOrDefault();
+            var paymentMethod = _paymentMethodRepo.FindByCondition(x => x.PaymentMethodId == model.PaymentMethodId).FirstOrDefault();
             var teacherObject = _teacherRepo.FindByConditionWithFKData(x => x.TeacherId == classObject.TeacherId);
-
+            
             var registrationReply = new EmailDto();
             registrationReply.Body = _serviceExtension.CreateRegistrationReplyHTML(student.FirstName +" "+ student.LastName, teacherObject.FirstName, classObject.ClassName, teacherObject.User.Email, teacherObject.User.PhoneNumber);
             //registrationReply.Body = "Dear Student, <br><br> <h1> Thank you</h1>";
@@ -98,6 +100,13 @@ namespace APIACMS.Services
             }
             else
             {
+                var amount = catObject.DiscountedFee??catObject.TotalTutionFee / paymentMethod.Terms;
+                var invoice =new EmailDto();
+                invoice.Body = _serviceExtension.CreateInvoice(student.FirstName+" "+student.LastName,teacherObject.FirstName,catObject.CategoryName,amount.ToString(),paymentMethod.MethodName+"-"+paymentMethod.Terms+"Terms");
+                invoice.To = student.User.Email;
+                invoice.Subject = "ACMS Class Invoice";
+                invoice.Cc = teacherObject.User.Email;
+                _serviceExtension.Send(invoice);
                 return true;
             }
 
@@ -121,7 +130,7 @@ namespace APIACMS.Services
         {
             var imageUrl = _serviceExtension.Upload(session);
 
-            string host = _httpContextAccessor.HttpContext.Request.Host.Value;
+            string host = "https://"+_httpContextAccessor.HttpContext.Request.Host.Value+"/";
 
 
             var registredClassObject = _registredClassRepo.FindAllByConditionWithFKData(x => x.RegistredClassId == new Guid(session.RegistredClassId));
@@ -145,8 +154,7 @@ namespace APIACMS.Services
             registrationReply.To = studentObject.User.Email;
             registrationReply.Subject = "ACMS Class Payment";
             registrationReply.Cc = teacherObject.Teacher.User.Email;
-            //WAIT UNTIL MRSTAN UNBLOCK
-            //_serviceExtension.Send(registrationReply);
+            _serviceExtension.Send(registrationReply);
 
 
             if (imageUrl == "Failed")
@@ -161,9 +169,9 @@ namespace APIACMS.Services
             }
 
         }
-        public IQueryable<Student> GetProfileStudent(Guid guid)
+        public Student GetProfileStudent(Guid guid)
         {
-            var result = _studentRepo.FindByCondition(x => x.StudentId == guid);
+            var result = _studentRepo.FindByCondition(x => x.StudentId == guid).FirstOrDefault();
 
             return result;
 

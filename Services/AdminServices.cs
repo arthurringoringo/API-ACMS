@@ -268,6 +268,12 @@ namespace APIACMS.Services
 
             return result;
         }
+        public IQueryable<PaidSession> GetPaidSessionWithFk()
+        {
+            var result = _paidSessionRepo.FindAllWithFkData();
+
+            return result;
+        }
 
         public IQueryable<PaidSession> GetPaidSessionByCondition(Expression<Func<PaidSession, bool>> expression)
         {
@@ -279,6 +285,12 @@ namespace APIACMS.Services
         public PaidSession GetPaidSessionWithExpressionAndFkData(Guid id)
         {
             var result = _paidSessionRepo.FindByConditionWithFKData(x => x.PaidSessionId == id);
+
+            return result;
+        }
+        public IQueryable<PaymentMethod> GetPaymentMethods()
+        {
+            var result = _paymentMethodRepo.FindAll();
 
             return result;
         }

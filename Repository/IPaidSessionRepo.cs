@@ -9,5 +9,7 @@ namespace APIACMS.Repository
     {
         public PaidSession FindByConditionWithFKData(Expression<Func<PaidSession, bool>> expression);
         public IQueryable<PaidSession> FindAllByConditionWithFkData(Expression<Func<PaidSession, bool>> expression);
+        public IQueryable<PaidSession> FindAllWithFkData();
+
     }
 }

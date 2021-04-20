@@ -12,7 +12,7 @@ namespace APIACMS.Services
         public bool RegisterClassStudent(RegistredClass model);
         public bool UpdateProfile(Student student);
         public string UploadReciept(PaidSessionDTOs session);
-        public IQueryable<Student> GetProfileStudent(Guid guid);
+        public Student GetProfileStudent(Guid guid);
         public IQueryable<ClassCategory> GetAvailableClassCategory();
         public List<AvailableClass> GetAvailableClass();
         public IQueryable<PaymentMethod> GetPaymentMethod();

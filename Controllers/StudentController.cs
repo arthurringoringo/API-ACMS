@@ -95,7 +95,7 @@ namespace APIACMS.Controllers
         {
             var result = _studentServices.UpdateProfile(student);
 
-            return Ok(student);
+            return Ok(result);
         }
         [HttpGet("classcategory")]
         public IActionResult Getclasscategory()

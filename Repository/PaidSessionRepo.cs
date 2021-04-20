@@ -34,5 +34,17 @@ namespace APIACMS.Repository
                 .ThenInclude(x => x.Class)
                 .Where(expression);
         }
+        public IQueryable<PaidSession> FindAllWithFkData()
+        {
+            return _context.Set<PaidSession>()
+                .AsNoTracking()
+                .Include(x => x.RegistredClass)
+                .Include(x => x.RegistredClass.Category)
+                .Include(x => x.RegistredClass.Student)
+                .Include(x => x.RegistredClass.Class)
+                .Include(x => x.RegistredClass.Class.Teacher)
+                
+                ;
+        }
     }
 }

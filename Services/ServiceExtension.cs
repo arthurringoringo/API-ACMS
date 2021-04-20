@@ -13,6 +13,7 @@ using System.IO;
 using System.Net.Http.Headers;
 using System.Text;
 using MailKit.Net.Imap;
+using System.Drawing;
 
 namespace APIACMS.Services
 {
@@ -71,7 +72,7 @@ namespace APIACMS.Services
             using var smtp = new SmtpClient();
             try
             {
-                smtp.Connect(_smtpHost, _smtpPort,true);
+                smtp.Connect(_smtpHost, _smtpPort);
 
                 smtp.Authenticate(_emailAddress, _emailPassword);
 
@@ -96,6 +97,8 @@ namespace APIACMS.Services
         public string Upload(PaidSessionDTOs image)
         {
             var file = image;
+
+
             var folderName = Path.Combine("Resources", "Images", "BankReciept");
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
             if (file.Image.Length> 0)
@@ -140,6 +143,15 @@ namespace APIACMS.Services
         {
             return "Thankyou for the payment <br><br>Your reciept is uploaded to the system and will be reviwed during office hours." +
                 "<br><br>Sincerly, <br> <br> <br>The AIU Community Music School Team";
+        }
+
+        public string CreateInvoice(string name, string teacher, string level, string amount, string typeofpayment)
+        {
+         return "<div class=\"box\"><div class=\"center\">ASIA PACIFIC INTERNATIONAL UNIVERSITY<br>AIU COMMUNITY MUSIC SCHOOL<br>" +
+                "<br>INVOICE</div><br><br>Name: "+name+" ID:____________ (For AIU student)" +
+                "<br>Teacher: "+ teacher+" Level: "+level+"<br>Payment Amount: "+amount+" Bath<br>Type of Payment: "+typeofpayment+"</div>" +
+                "<style>table, th, td border: 1px solid black;border - collapse: collapse;padding: 10px;}.center{text-align: center;font-family:'Times New Roman', Times, serif ;" +
+                "}.box{width: 500px;height: 250px;}</ style > ";
         }
     }
 }
