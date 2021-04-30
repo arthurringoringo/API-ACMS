@@ -21,9 +21,9 @@ namespace APIACMS.Repository
         public ClassCategory FindByConditionWithFKData(Expression<Func<ClassCategory, bool>> expression)
         {
             return _context.Set<ClassCategory>()
-                .AsNoTracking()
                 .Include(x => x.RegistredClasses)
                 .Where(expression)
+                .AsNoTracking()
                 .FirstOrDefault();
         }
     }

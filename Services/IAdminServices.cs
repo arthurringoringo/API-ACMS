@@ -59,10 +59,12 @@ namespace APIACMS.Services
 
         public IQueryable<PaidSession> GetPaidSession();
         public IQueryable<PaidSession> GetPaidSessionWithFk();
+        public IQueryable<PaidSession> GetPaidSessionWithExpressionAndFkData(Expression<Func<PaidSession, bool>> expression);
         public IQueryable<PaidSession> GetPaidSessionByCondition(Expression<Func<PaidSession, bool>> expression);
 
         public IQueryable<RegistredClass> GetRegistredClass();
         public IQueryable<RegistredClass> GetRegistredClassByCondition(Expression<Func<RegistredClass, bool>> expression);
+        public IQueryable<RegistredClass> GetAllRegistredClassWithExpressionAndFkData(Expression<Func<RegistredClass, bool>> expression);
 
         public IQueryable<SessionSchedule> GetSessionSchedule();
         public IQueryable<SessionSchedule> GetSessionScheduleByCondition(Expression<Func<SessionSchedule, bool>> expression);
@@ -85,5 +87,7 @@ namespace APIACMS.Services
 
         //
         //BissLogic
+        //Teacher
+        public bool SendTeacherAssessmentConfirmation(EmailDto email);
     }
 }

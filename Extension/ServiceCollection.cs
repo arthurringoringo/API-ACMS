@@ -15,15 +15,15 @@ namespace APIACMS.Extension
         public static IServiceCollection AddRepositoryCollection(this IServiceCollection services )
         {
 
-            services.AddScoped<IAvailableClassRepo,AvailableClassRepo>();
-            services.AddScoped<IClassCategoryRepo, ClassCategoryRepo>();
-            services.AddScoped<IClassReportRepo,ClassReportRepo>();
-            services.AddScoped<IPaidSessionRepo, PaidSessionRepo>();
-            services.AddScoped<IPaymentMethodRepo, PaymentMethodRepo>();
-            services.AddScoped<IRegistredClassRepo, RegistredClassRepo>();
-            services.AddScoped<ISessionScheduleRepo, SessionScheduleRepo>();
-            services.AddScoped<IStudentRepo, StudentRepo>();
-            services.AddScoped<ITeacherRepo, TeacherRepo>();
+            services.AddTransient<IAvailableClassRepo,AvailableClassRepo>();
+            services.AddTransient<IClassCategoryRepo, ClassCategoryRepo>();
+            services.AddTransient<IClassReportRepo,ClassReportRepo>();
+            services.AddTransient<IPaidSessionRepo, PaidSessionRepo>();
+            services.AddTransient<IPaymentMethodRepo, PaymentMethodRepo>();
+            services.AddTransient<IRegistredClassRepo, RegistredClassRepo>();
+            services.AddTransient<ISessionScheduleRepo, SessionScheduleRepo>();
+            services.AddTransient<IStudentRepo, StudentRepo>();
+            services.AddTransient<ITeacherRepo, TeacherRepo>();
 
             return services;
         

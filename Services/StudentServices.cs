@@ -73,7 +73,9 @@ namespace APIACMS.Services
         {
             model.CreatedOn = DateTime.Now;
             model.ConfirmedByTeacher = false;
+            model.FullyPaid = false;
             model.DateRegistered = DateTime.Now;
+   
             var result = _registredClassRepo.Create(model);
 
 
@@ -100,7 +102,9 @@ namespace APIACMS.Services
             }
             else
             {
-                var amount = catObject.DiscountedFee??catObject.TotalTutionFee / paymentMethod.Terms;
+                decimal amount = new decimal();
+                if (catObject.DiscountedFee == 0) { amount = catObject.TotalTutionFee.Value; } else { amount = catObject.DiscountedFee.Value; };
+                amount = Math.Round((decimal)(amount /paymentMethod.Terms), 2);
                 var invoice =new EmailDto();
                 invoice.Body = _serviceExtension.CreateInvoice(student.FirstName+" "+student.LastName,teacherObject.FirstName,catObject.CategoryName,amount.ToString(),paymentMethod.MethodName+"-"+paymentMethod.Terms+"Terms");
                 invoice.To = student.User.Email;

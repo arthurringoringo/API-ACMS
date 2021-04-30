@@ -20,11 +20,11 @@ namespace APIACMS.Repository
         public Student FindByConditionWithFKData(Expression<Func<Student, bool>> expression)
         {
             return _context.Set<Student>()
-                .AsNoTracking()
                 .Include(x => x.RegistredClasses)
                 .Include(x => x.SessionSchedules)
                 .Include(x => x.User)
                 .Where(expression)
+                .AsNoTracking()
                 .FirstOrDefault();
         }
 

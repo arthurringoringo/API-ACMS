@@ -20,31 +20,33 @@ namespace APIACMS.Repository
         public PaidSession FindByConditionWithFKData(Expression<Func<PaidSession, bool>> expression)
         {
             return _context.Set<PaidSession>()
-                .AsNoTracking()
                 .Include(x => x.RegistredClass)
                 .ThenInclude(x => x.Class)
                 .Where(expression)
+                .AsNoTracking()
                 .FirstOrDefault();
         }
         public IQueryable<PaidSession> FindAllByConditionWithFkData(Expression<Func<PaidSession, bool>> expression)
         {
             return _context.Set<PaidSession>()
-                .AsNoTracking()
                 .Include(x => x.RegistredClass)
-                .ThenInclude(x => x.Class)
+                .Include(x => x.RegistredClass.Category)
+                .Include(x => x.RegistredClass.Student)
+                .Include(x => x.RegistredClass.PaymentMethod)
+                .Include(x => x.RegistredClass.Class)
+                .Include(x => x.RegistredClass.Class.Teacher)
+                .AsNoTracking()
                 .Where(expression);
         }
         public IQueryable<PaidSession> FindAllWithFkData()
         {
             return _context.Set<PaidSession>()
-                .AsNoTracking()
                 .Include(x => x.RegistredClass)
                 .Include(x => x.RegistredClass.Category)
                 .Include(x => x.RegistredClass.Student)
                 .Include(x => x.RegistredClass.Class)
                 .Include(x => x.RegistredClass.Class.Teacher)
-                
-                ;
+                .AsNoTracking();
         }
     }
 }

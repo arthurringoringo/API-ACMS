@@ -20,22 +20,23 @@ namespace APIACMS.Repository
         public RegistredClass FindByConditionWithFKData(Expression<Func<RegistredClass, bool>> expression)
         {
             return _context.Set<RegistredClass>()
-                .AsNoTracking()
                 .Include(x => x.Category)
                 .Include(x => x.Class)
                 .Include(x => x.PaymentMethod)
                 .Include(x => x.Student)
                 .Where(expression)
+                .AsNoTracking()
                 .FirstOrDefault();
         }
         public IQueryable<RegistredClass> FindAllByConditionWithFKData(Expression<Func<RegistredClass, bool>> expression)
         {
             return _context.Set<RegistredClass>()
-                .AsNoTracking()
                 .Include(x => x.Category)
-                .Include(x => x.Class).ThenInclude(x => x.Teacher)
+                .Include(x => x.Class).ThenInclude(x => x.Teacher).ThenInclude(x => x.User)
                 .Include(x => x.PaymentMethod)
-                .Include(x => x.Student)
+                .Include(x => x.Student).ThenInclude(x => x.User)
+                .Include(x => x.PaidSession)
+                .AsNoTracking()
                 .Where(expression)
                 ;
         }

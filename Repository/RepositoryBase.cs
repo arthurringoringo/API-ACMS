@@ -48,11 +48,15 @@ namespace APIACMS.Repository
         }
         public T Update(T entity)
         {
+            
             try
             {
+
                 _context.Set<T>().Update(entity);
 
                 _context.SaveChanges();
+
+                _context.Entry(entity).State = EntityState.Detached;
 
                 return entity;
             }

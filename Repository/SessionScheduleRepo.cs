@@ -20,11 +20,11 @@ namespace APIACMS.Repository
         public SessionSchedule FindByConditionWithFKData(Expression<Func<SessionSchedule, bool>> expression)
         {
             return _context.Set<SessionSchedule>()
-                .AsNoTracking()
                 .Include(x => x.Class)
                 .Include(x => x.Student)
                 .Include(x => x.Teacher)
                 .Where(expression)
+                .AsNoTracking()
                 .FirstOrDefault();
         }
     }

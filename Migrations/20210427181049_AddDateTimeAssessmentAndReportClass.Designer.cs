@@ -4,14 +4,16 @@ using ACMS.DAL.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace APIACMS.Migrations
 {
     [DbContext(typeof(APIDbContext))]
-    partial class APIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210427181049_AddDateTimeAssessmentAndReportClass")]
+    partial class AddDateTimeAssessmentAndReportClass
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -186,7 +188,7 @@ namespace APIACMS.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasMaxLength(250);
 
-                    b.Property<DateTime?>("AssessmentDate")
+                    b.Property<DateTime>("AssessmentDate")
                         .HasColumnType("datetime");
 
                     b.Property<Guid>("CategoryId")

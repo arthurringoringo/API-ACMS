@@ -20,9 +20,9 @@ namespace APIACMS.Repository
         public PaymentMethod FindByConditionWithFKData(Expression<Func<PaymentMethod, bool>> expression)
         {
             return _context.Set<PaymentMethod>()
-                .AsNoTracking()
                 .Include(x => x.RegistredClasses)
                 .Where(expression)
+                .AsNoTracking()
                 .FirstOrDefault();
         }
     }

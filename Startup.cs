@@ -55,7 +55,10 @@ namespace APIACMS
                        {
                            sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
                            sqlOptions.EnableRetryOnFailure(10, TimeSpan.FromSeconds(30), null);
+                           
                        });
+                       e.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                       e.EnableSensitiveDataLogging();
 
                    });
             services.AddCors(options =>

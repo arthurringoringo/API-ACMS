@@ -19,6 +19,7 @@ namespace APIACMS.Services
         private readonly ISessionScheduleRepo _sessionScheduledRepo;
         private readonly IStudentRepo _studentRepo;
         private readonly ITeacherRepo _teacherRepo;
+        private readonly IServiceExtension _serviceExtension;
 
 
         public AdminServices(IAvailableClassRepo availableClassRepo,
@@ -29,7 +30,8 @@ namespace APIACMS.Services
             IRegistredClassRepo registeredClassRepo,
             ISessionScheduleRepo sessionScheduledRepo,
             IStudentRepo studentRepo,
-            ITeacherRepo teacherRepo
+            ITeacherRepo teacherRepo,
+            IServiceExtension serviceExtension
             )
         {
             _availableClassRepo = availableClassRepo ?? throw new ArgumentNullException(nameof(availableClassRepo));
@@ -41,7 +43,7 @@ namespace APIACMS.Services
             _sessionScheduledRepo = sessionScheduledRepo ?? throw new ArgumentNullException(nameof(sessionScheduledRepo));
             _studentRepo = studentRepo ?? throw new ArgumentNullException(nameof(studentRepo));
             _teacherRepo = teacherRepo ?? throw new ArgumentNullException(nameof(teacherRepo));
-
+            _serviceExtension = serviceExtension ?? throw new ArgumentNullException(nameof(serviceExtension));
         }
 
         public bool CreateAvailableClass(AvailableClass model)
@@ -281,6 +283,12 @@ namespace APIACMS.Services
 
             return result;
         }
+        public IQueryable<PaidSession> GetPaidSessionWithExpressionAndFkData(Expression<Func<PaidSession, bool>> expression)
+        {
+            var result = _paidSessionRepo.FindAllByConditionWithFkData(expression);
+
+            return result;
+        }
 
         public PaidSession GetPaidSessionWithExpressionAndFkData(Guid id)
         {
@@ -322,6 +330,15 @@ namespace APIACMS.Services
 
             return result;
         }
+
+
+        public IQueryable<RegistredClass> GetAllRegistredClassWithExpressionAndFkData(Expression<Func<RegistredClass, bool>> expression)
+        {
+            var result = _registeredClassRepo.FindAllByConditionWithFKData(expression);
+
+            return result;
+        }
+
 
         public IQueryable<SessionSchedule> GetSessionSchedule()
         {
@@ -430,6 +447,18 @@ namespace APIACMS.Services
 
         public bool UpdatePaidSession(PaidSession model)
         {
+            PaidSession updateItem = new PaidSession();
+            updateItem.PaidSessionId = model.PaidSessionId;
+            updateItem.RegistredClassId = model.RegistredClassId;
+            updateItem.PaymentAccepted = model.PaymentAccepted;
+            updateItem.CreatedOn = model.CreatedOn;
+            updateItem.Deleted = model.Deleted;
+            updateItem.DeletedOn = model.DeletedOn;
+            updateItem.DatePaid = model.DatePaid;
+            updateItem.PictureLink = model.PictureLink;
+            updateItem.PaymentsMonth = model.PaymentsMonth;
+
+
             var result = _paidSessionRepo.Update(model);
 
             if (result == model)
@@ -499,5 +528,14 @@ namespace APIACMS.Services
         }
 
         //bisnis logic
+
+
+        //Teacher
+        public bool SendTeacherAssessmentConfirmation(EmailDto email) 
+        {
+            var result = _serviceExtension.Send(email);
+
+            return result;
+        }
     }
 }

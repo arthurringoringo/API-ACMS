@@ -4,14 +4,16 @@ using ACMS.DAL.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace APIACMS.Migrations
 {
     [DbContext(typeof(APIDbContext))]
-    partial class APIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210426152922_AddlastNameTeacher")]
+    partial class AddlastNameTeacher
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,10 +105,15 @@ namespace APIACMS.Migrations
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("RegistredClassesRegistredClassId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Remarks")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ClassReportId");
+
+                    b.HasIndex("RegistredClassesRegistredClassId");
 
                     b.ToTable("ClassReport");
                 });
@@ -186,18 +193,11 @@ namespace APIACMS.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasMaxLength(250);
 
-                    b.Property<DateTime?>("AssessmentDate")
-                        .HasColumnType("datetime");
-
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier")
                         .HasMaxLength(250);
 
                     b.Property<Guid>("ClassId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasMaxLength(250);
-
-                    b.Property<Guid>("ClassReportId")
                         .HasColumnType("uniqueidentifier")
                         .HasMaxLength(250);
 
@@ -209,6 +209,10 @@ namespace APIACMS.Migrations
 
                     b.Property<DateTime>("DateRegistered")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("Day")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
@@ -227,14 +231,14 @@ namespace APIACMS.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasMaxLength(250);
 
+                    b.Property<TimeSpan?>("Time")
+                        .HasColumnType("time");
+
                     b.HasKey("RegistredClassId");
 
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("ClassId");
-
-                    b.HasIndex("ClassReportId")
-                        .IsUnique();
 
                     b.HasIndex("PaymentMethodId");
 
@@ -609,6 +613,13 @@ namespace APIACMS.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ACMS.DAL.Models.ClassReport", b =>
+                {
+                    b.HasOne("ACMS.DAL.Models.RegistredClass", "RegistredClasses")
+                        .WithMany()
+                        .HasForeignKey("RegistredClassesRegistredClassId");
+                });
+
             modelBuilder.Entity("ACMS.DAL.Models.PaidSession", b =>
                 {
                     b.HasOne("ACMS.DAL.Models.RegistredClass", "RegistredClass")
@@ -632,13 +643,6 @@ namespace APIACMS.Migrations
                         .WithMany("RegistredClasses")
                         .HasForeignKey("ClassId")
                         .HasConstraintName("FK_RegistredClass_AvailableClasses")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ACMS.DAL.Models.ClassReport", "ClassReport")
-                        .WithOne("RegistredClasses")
-                        .HasForeignKey("ACMS.DAL.Models.RegistredClass", "ClassReportId")
-                        .HasConstraintName("FK_RegistredClass_ClassReport")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

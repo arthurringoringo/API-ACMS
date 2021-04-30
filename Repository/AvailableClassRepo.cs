@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using ACMS.DAL.Models;
 using ACMS.DAL.DataContext;
 using System.Linq.Expressions;
-using ACMS.DAL.DataContext;
 using Microsoft.EntityFrameworkCore;
 
 namespace APIACMS.Repository
@@ -23,19 +22,19 @@ namespace APIACMS.Repository
         public AvailableClass FindByConditionWithFKData(Expression<Func<AvailableClass, bool>> expression)
         {
             return _context.Set<AvailableClass>()
-                .AsNoTracking()
                 .Include(d => d.RegistredClasses)
                 .Include(d => d.SessionSchedules)
                 .Include(d => d.Teacher)
                 .ThenInclude(d => d.User)
                 .Where(expression)
+                .AsNoTracking()
                 .FirstOrDefault();
         }
         public List<AvailableClass> FindAllWithFKData()
         {
             return _context.Set<AvailableClass>()
-                .AsNoTracking()
                 .Include(d => d.Teacher)
+                .AsNoTracking()
                 .ToList();
         }
 

@@ -54,9 +54,11 @@ namespace APIACMS.Services
 
             email.To.Add(MailboxAddress.Parse(content.To));
 
-            email.Cc.Add(MailboxAddress.Parse(content.Cc));
+            if (content.Cc != null)
+            {
+                email.Cc.Add(MailboxAddress.Parse(content.Cc));
+            } 
 
-            email.ReplyTo.Add(MailboxAddress.Parse(_emailAddress));
 
             email.Subject = content.Subject;
 
@@ -147,11 +149,10 @@ namespace APIACMS.Services
 
         public string CreateInvoice(string name, string teacher, string level, string amount, string typeofpayment)
         {
-         return "<div class=\"box\"><div class=\"center\">ASIA PACIFIC INTERNATIONAL UNIVERSITY<br>AIU COMMUNITY MUSIC SCHOOL<br>" +
-                "<br>INVOICE</div><br><br>Name: "+name+" ID:____________ (For AIU student)" +
-                "<br>Teacher: "+ teacher+" Level: "+level+"<br>Payment Amount: "+amount+" Bath<br>Type of Payment: "+typeofpayment+"</div>" +
-                "<style>table, th, td border: 1px solid black;border - collapse: collapse;padding: 10px;}.center{text-align: center;font-family:'Times New Roman', Times, serif ;" +
-                "}.box{width: 500px;height: 250px;}</ style > ";
+            return "<div style=\"width:500px;height:250px;border-style:solid;\"><div style=\"text-align: center; font-family:'Times New Roman',Times,serif;\">ASIA PACIFIC INTERNATIONAL UNIVERSITY<br>AIU COMMUNITY MUSIC SCHOOL<br>" +
+                   "<br>INVOICE</div><br><br>Name:___" + name + "___  ID:____________ (For AIU student)" +
+                   "<br>Teacher:___ " + teacher + "___ Level:___ " + level + "___<br>Payment Amount:___" + amount + "___ Bath<br>Type of Payment:___" + typeofpayment + "___</div>";
+
         }
     }
 }
