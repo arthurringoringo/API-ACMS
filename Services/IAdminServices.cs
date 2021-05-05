@@ -26,6 +26,7 @@ namespace APIACMS.Services
         public bool UpdatePaidSession(PaidSession model);
         public bool UpdateRegisteredClass(RegistredClass model);
         public bool UpdateSessionSchedule(SessionSchedule model);
+        public bool UpdatePaymentMethod(PaymentMethod model);
         public bool UpdateStudent(Student model);
         public bool UpdateTeacher(Teacher model);
 
@@ -42,6 +43,7 @@ namespace APIACMS.Services
         public bool DeletePaidSession(PaidSession model);
         public bool DeleteRegisteredClass(RegistredClass model);
         public bool DeleteSessionSchedule(SessionSchedule model);
+        public bool DeletePaymentMethod(PaymentMethod model);
         public bool DeleteStudent(Student model);
         public bool DeleteTeacher(Teacher model);
 
@@ -68,6 +70,8 @@ namespace APIACMS.Services
 
         public IQueryable<SessionSchedule> GetSessionSchedule();
         public IQueryable<SessionSchedule> GetSessionScheduleByCondition(Expression<Func<SessionSchedule, bool>> expression);
+        public IQueryable<SessionSchedule> GetAllSessionSchedulesWithExpressionAndFkData(Expression<Func<SessionSchedule, bool>> expression);
+        public SessionSchedule GetSessionSchedulesWithExpressionAndFkData(Expression<Func<SessionSchedule, bool>> expression);
 
         public IQueryable<Student> GetStudent();
         public IQueryable<Student> GetStudentByCondition(Expression<Func<Student, bool>> expression);
@@ -81,7 +85,6 @@ namespace APIACMS.Services
         public IQueryable<PaymentMethod> GetPaymentMethods();
         public PaymentMethod GetPaymentMethodWithExpressionAndFkData(Guid id);
         public RegistredClass GetRegistredClassWithExpressionAndFkData(Guid id);
-        public SessionSchedule GetSessionSchedulesWithExpressionAndFkData(Guid id);
         public Student GetStudentsWithExpressionAndFkData(Guid id);
         public Teacher GetTeacherWithExpressionAndFkData(Guid id);
 

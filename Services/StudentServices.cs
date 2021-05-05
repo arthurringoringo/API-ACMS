@@ -78,23 +78,23 @@ namespace APIACMS.Services
    
             var result = _registredClassRepo.Create(model);
 
-
+            #region Getting data for email reply
             var student = _studentRepo.FindByConditionWithFKData(x => x.StudentId == model.StudentId);
             var classObject = _availableClassRepo.FindByCondition(x => x.ClassId == model.ClassId).FirstOrDefault();
             var catObject = _classCategoryRepo.FindByCondition(x => x.CategoryId == model.CategoryId).FirstOrDefault();
             var paymentMethod = _paymentMethodRepo.FindByCondition(x => x.PaymentMethodId == model.PaymentMethodId).FirstOrDefault();
             var teacherObject = _teacherRepo.FindByConditionWithFKData(x => x.TeacherId == classObject.TeacherId);
-            
+            #endregion
+            #region Creating the email
             var registrationReply = new EmailDto();
             registrationReply.Body = _serviceExtension.CreateRegistrationReplyHTML(student.FirstName +" "+ student.LastName, teacherObject.FirstName, classObject.ClassName, teacherObject.User.Email, teacherObject.User.PhoneNumber);
-            //registrationReply.Body = "Dear Student, <br><br> <h1> Thank you</h1>";
             registrationReply.To = student.User.Email;
             registrationReply.Subject = "ACMS Class Registration";
             registrationReply.Cc = teacherObject.User.Email;
+            //Sending the email
             _serviceExtension.Send(registrationReply);
-            
-             // find ways to store list of date and time
-            // for Day row and time row
+            #endregion
+
 
             if (result != model)
             {
@@ -103,7 +103,7 @@ namespace APIACMS.Services
             else
             {
                 decimal amount = new decimal();
-                if (catObject.DiscountedFee == 0) { amount = catObject.TotalTutionFee.Value; } else { amount = catObject.DiscountedFee.Value; };
+                if (catObject.DiscountedFee is null) { amount = catObject.TotalTutionFee.Value; } else { amount = catObject.DiscountedFee.Value; };
                 amount = Math.Round((decimal)(amount /paymentMethod.Terms), 2);
                 var invoice =new EmailDto();
                 invoice.Body = _serviceExtension.CreateInvoice(student.FirstName+" "+student.LastName,teacherObject.FirstName,catObject.CategoryName,amount.ToString(),paymentMethod.MethodName+"-"+paymentMethod.Terms+"Terms");

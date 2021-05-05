@@ -194,6 +194,13 @@ namespace APIACMS.Services
             return result;
         }
 
+        public bool DeletePaymentMethod(PaymentMethod model)
+        {
+            var result = _paymentMethodRepo.Delete(model);
+
+            return result;
+        }
+
         public bool DeleteStudent(Student model)
         {
             var result = _studentRepo.Delete(model);
@@ -354,9 +361,15 @@ namespace APIACMS.Services
             return result;
         }
 
-        public SessionSchedule GetSessionSchedulesWithExpressionAndFkData(Guid id)
+        public SessionSchedule GetSessionSchedulesWithExpressionAndFkData(Expression<Func<SessionSchedule, bool>> expression)
         {
-            var result = _sessionScheduledRepo.FindByConditionWithFKData(x => x.ScheduleId == id);
+            var result = _sessionScheduledRepo.FindByConditionWithFKData(expression);
+
+            return result;
+        }
+        public IQueryable<SessionSchedule> GetAllSessionSchedulesWithExpressionAndFkData(Expression<Func<SessionSchedule, bool>> expression)
+        {
+            var result = _sessionScheduledRepo.FindAllByConditionWithFKData(expression);
 
             return result;
         }
@@ -488,6 +501,19 @@ namespace APIACMS.Services
         public bool UpdateSessionSchedule(SessionSchedule model)
         {
             var result = _sessionScheduledRepo.Update(model);
+
+            if (result == model)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public bool UpdatePaymentMethod(PaymentMethod model)
+        {
+            var result = _paymentMethodRepo.Update(model);
 
             if (result == model)
             {

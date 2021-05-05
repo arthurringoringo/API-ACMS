@@ -36,6 +36,8 @@ namespace APIACMS.Repository
 
                 _context.SaveChanges();
 
+                _context.Entry(entity).State = EntityState.Detached;
+
                 return entity;
             }
             catch (Exception e)

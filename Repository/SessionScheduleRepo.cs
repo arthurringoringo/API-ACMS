@@ -27,5 +27,14 @@ namespace APIACMS.Repository
                 .AsNoTracking()
                 .FirstOrDefault();
         }
+        public IQueryable<SessionSchedule> FindAllByConditionWithFKData(Expression<Func<SessionSchedule, bool>> expression)
+        {
+            return _context.Set<SessionSchedule>()
+                .Include(x => x.Class)
+                .Include(x => x.Student)
+                .Include(x => x.Teacher)
+                .Where(expression)
+                .AsNoTracking();
+        }
     }
 }
