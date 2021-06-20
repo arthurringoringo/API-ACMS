@@ -21,7 +21,7 @@ namespace APIACMS.Repository
         {
             return _context.Set<PaidSession>()
                 .Include(x => x.RegistredClass)
-                .ThenInclude(x => x.Class)
+                .ThenInclude(x => x.Class).Where(x => x.Deleted == false)
                 .Where(expression)
                 .AsNoTracking()
                 .FirstOrDefault();
@@ -29,23 +29,24 @@ namespace APIACMS.Repository
         public IQueryable<PaidSession> FindAllByConditionWithFkData(Expression<Func<PaidSession, bool>> expression)
         {
             return _context.Set<PaidSession>()
-                .Include(x => x.RegistredClass)
-                .Include(x => x.RegistredClass.Category)
-                .Include(x => x.RegistredClass.Student)
-                .Include(x => x.RegistredClass.PaymentMethod)
-                .Include(x => x.RegistredClass.Class)
-                .Include(x => x.RegistredClass.Class.Teacher)
+                .Include(x => x.RegistredClass ).Where(x => x.Deleted == false)
+                .Include(x => x.RegistredClass.Category).Where(x => x.Deleted == false)
+                .Include(x => x.RegistredClass.Student).Where(x => x.Deleted == false)
+                .Include(x => x.RegistredClass.PaymentMethod).Where(x => x.Deleted == false)
+                .Include(x => x.RegistredClass.Class).Where(x => x.Deleted == false)
+                .Include(x => x.RegistredClass.Class.Teacher).Where(x => x.Deleted == false)
                 .AsNoTracking()
                 .Where(expression);
         }
         public IQueryable<PaidSession> FindAllWithFkData()
         {
             return _context.Set<PaidSession>()
-                .Include(x => x.RegistredClass)
-                .Include(x => x.RegistredClass.Category)
-                .Include(x => x.RegistredClass.Student)
-                .Include(x => x.RegistredClass.Class)
-                .Include(x => x.RegistredClass.Class.Teacher)
+                .Include(x => x.RegistredClass).Where(x => x.Deleted == false)
+                .Include(x => x.RegistredClass.Category).Where(x => x.Deleted == false)
+                .Include(x => x.RegistredClass.Student).Where(x => x.Deleted == false)
+                .Include(x => x.RegistredClass.Class).Where(x => x.Deleted == false)
+                .Include(x => x.RegistredClass.Class.Teacher).Where(x => x.Deleted == false)
+                .Where( x => x.Deleted == false)
                 .AsNoTracking();
         }
     }

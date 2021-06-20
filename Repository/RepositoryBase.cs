@@ -70,14 +70,18 @@ namespace APIACMS.Repository
 
             }
         }
+//softdelete
         public bool Delete(T entity)
         {
+              
             try
             {
 
                 _context.Set<T>().Remove(entity);
 
                 _context.SaveChanges();
+
+                _context.Entry(entity).State = EntityState.Detached;
 
                 return true;
 
@@ -88,6 +92,8 @@ namespace APIACMS.Repository
 
             }
         }
+
+
 
     }
 }

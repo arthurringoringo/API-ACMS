@@ -191,7 +191,9 @@ namespace APIACMS.Services
         public IQueryable<ClassCategory> GetAvailableClassCategory()
         {
             var result = _classCategoryRepo.FindAll();
-            
+
+            result = result.Where(x => x.Deleted == false);
+
             return result;
         
         }
@@ -199,7 +201,8 @@ namespace APIACMS.Services
         public List<AvailableClass> GetAvailableClass()
         {
             var result = _availableClassRepo.FindAllWithFKData();
-            
+
+
             return result;
 
         }
@@ -207,19 +210,23 @@ namespace APIACMS.Services
         {
             var result = _paymentMethodRepo.FindAll();
 
+            result = result.Where(x => x.Deleted == false);
+
             return result;
 
         }
         public IQueryable<RegistredClass> GetStudentRegistredClass(Guid id)
         {
-            var result = _registredClassRepo.FindAllByConditionWithFKData(x=>x.StudentId == id);
+            var result = _registredClassRepo.FindAllByConditionWithFKData(x=>x.StudentId == id && x.Deleted ==false);
+
+
 
             return result;
 
         }
         public IQueryable<RegistredClass> GetStudentRegistredClassNotFullyPaid(Guid id)
         {
-            var result = _registredClassRepo.FindAllByConditionWithFKData(x => x.StudentId == id && x.FullyPaid == null || false);
+            var result = _registredClassRepo.FindAllByConditionWithFKData(x => x.StudentId == id && x.FullyPaid == null || false && x.Deleted == false);
 
             return result;
 
@@ -227,7 +234,7 @@ namespace APIACMS.Services
 
         public IQueryable<PaidSession> GetStudentPaidSessionWithFKData(Guid id)
         {
-            var result = _paidSessionRepo.FindAllByConditionWithFkData(x => x.RegistredClass.StudentId == id);
+            var result = _paidSessionRepo.FindAllByConditionWithFkData(x => x.RegistredClass.StudentId == id && x.Deleted == false);
 
             return result;
 

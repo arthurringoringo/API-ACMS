@@ -153,6 +153,8 @@ namespace APIACMS.Services
 
         public bool DeleteAvailableClass(AvailableClass model)
         {
+            model.Deleted = true;
+            model.DeletedOn = DateTime.Now;
 
             var result = _availableClassRepo.Delete(model);
 
@@ -161,6 +163,9 @@ namespace APIACMS.Services
 
         public bool DeleteClassCategory(ClassCategory model)
         {
+            model.Deleted = true;
+            model.DeletedOn = DateTime.Now;
+
             var result = _classCategoryRepo.Delete(model);
 
             return result;
@@ -168,6 +173,9 @@ namespace APIACMS.Services
 
         public bool DeleteClassReport(ClassReport model)
         {
+            model.Deleted = true;
+            model.DeletedOn = DateTime.Now;
+
             var result = _classReportRepo.Delete(model);
 
             return result;
@@ -175,6 +183,9 @@ namespace APIACMS.Services
 
         public bool DeletePaidSession(PaidSession model)
         {
+            model.Deleted = true;
+            model.DeletedOn = DateTime.Now;
+
             var result = _paidSessionRepo.Delete(model);
 
             return result;
@@ -182,6 +193,9 @@ namespace APIACMS.Services
 
         public bool DeleteRegisteredClass(RegistredClass model)
         {
+            model.Deleted = true;
+            model.DeletedOn = DateTime.Now;
+
             var result = _registeredClassRepo.Delete(model);
 
             return result;
@@ -189,6 +203,9 @@ namespace APIACMS.Services
 
         public bool DeleteSessionSchedule(SessionSchedule model)
         {
+            model.Deleted = true;
+            model.DeletedOn = DateTime.Now;
+
             var result = _sessionScheduledRepo.Delete(model);
 
             return result;
@@ -196,6 +213,9 @@ namespace APIACMS.Services
 
         public bool DeletePaymentMethod(PaymentMethod model)
         {
+            model.Deleted = true;
+            model.DeletedOn = DateTime.Now;
+
             var result = _paymentMethodRepo.Delete(model);
 
             return result;
@@ -203,6 +223,9 @@ namespace APIACMS.Services
 
         public bool DeleteStudent(Student model)
         {
+            model.Deleted = true;
+            model.DeletedOn = DateTime.Now;
+
             var result = _studentRepo.Delete(model);
 
             return result;
@@ -210,6 +233,9 @@ namespace APIACMS.Services
 
         public bool DeleteTeacher(Teacher model)
         {
+            model.Deleted = true;
+            model.DeletedOn = DateTime.Now;
+
             var result = _teacherRepo.Delete(model);
 
             return result;
@@ -219,6 +245,8 @@ namespace APIACMS.Services
         {
             var result = _availableClassRepo.FindAll();
 
+            result = result.Where(x => x.Deleted == false);
+
             return result;
         }
 
@@ -226,12 +254,14 @@ namespace APIACMS.Services
         {
             var result = _availableClassRepo.FindByCondition(expression);
 
+            result = result.Where(x => x.Deleted == false);
+
             return result;
         }
 
         public AvailableClass GetAvailableClassesWithExpressionAndFkData(Guid id)
         {
-            var result = _availableClassRepo.FindByConditionWithFKData(x => x.ClassId == id);
+            var result = _availableClassRepo.FindByConditionWithFKData(x => x.ClassId == id && x.Deleted== false);
 
             return result;
         }
@@ -240,6 +270,8 @@ namespace APIACMS.Services
         {
             var result = _classCategoryRepo.FindAll();
 
+            result = result.Where(x => x.Deleted == false);
+
             return result;
         }
 
@@ -247,12 +279,14 @@ namespace APIACMS.Services
         {
             var result = _classCategoryRepo.FindByCondition(expression);
 
+            result = result.Where(x => x.Deleted == false);
+
             return result;
         }
 
         public ClassCategory GetClassCategoryWithExpressionAndFkData(Guid id)
         {
-            var result = _classCategoryRepo.FindByConditionWithFKData(x => x.CategoryId == id);
+            var result = _classCategoryRepo.FindByConditionWithFKData(x => x.CategoryId == id && x.Deleted == false);
 
             return result;
         }
@@ -261,12 +295,16 @@ namespace APIACMS.Services
         {
             var result = _classReportRepo.FindAll();
 
+            result = result.Where(x => x.Deleted == false);
+
             return result;
         }
 
         public IQueryable<ClassReport> GetClassReportByCondition(Expression<Func<ClassReport, bool>> expression)
         {
             var result = _classReportRepo.FindByCondition(expression);
+
+            result = result.Where(x => x.Deleted == false);
 
             return result;
         }
@@ -275,11 +313,15 @@ namespace APIACMS.Services
         {
             var result = _paidSessionRepo.FindAll();
 
+            result = result.Where(x => x.Deleted == false);
+
             return result;
         }
         public IQueryable<PaidSession> GetPaidSessionWithFk()
         {
             var result = _paidSessionRepo.FindAllWithFkData();
+
+            result = result.Where(x => x.Deleted == false);
 
             return result;
         }
@@ -288,18 +330,22 @@ namespace APIACMS.Services
         {
             var result = _paidSessionRepo.FindByCondition(expression);
 
+            result = result.Where(x => x.Deleted == false);
+
             return result;
         }
         public IQueryable<PaidSession> GetPaidSessionWithExpressionAndFkData(Expression<Func<PaidSession, bool>> expression)
         {
             var result = _paidSessionRepo.FindAllByConditionWithFkData(expression);
 
+            result = result.Where(x => x.Deleted == false);
+
             return result;
         }
 
         public PaidSession GetPaidSessionWithExpressionAndFkData(Guid id)
         {
-            var result = _paidSessionRepo.FindByConditionWithFKData(x => x.PaidSessionId == id);
+            var result = _paidSessionRepo.FindByConditionWithFKData(x => x.PaidSessionId == id && x.Deleted == false);
 
             return result;
         }
@@ -307,12 +353,14 @@ namespace APIACMS.Services
         {
             var result = _paymentMethodRepo.FindAll();
 
+            result = result.Where(x => x.Deleted == false);
+
             return result;
         }
 
         public PaymentMethod GetPaymentMethodWithExpressionAndFkData(Guid id)
         {
-            var result = _paymentMethodRepo.FindByConditionWithFKData(x => x.PaymentMethodId == id);
+            var result = _paymentMethodRepo.FindByConditionWithFKData(x => x.PaymentMethodId == id && x.Deleted == false);
 
             return result;
         }
@@ -321,6 +369,8 @@ namespace APIACMS.Services
         {
             var result = _registeredClassRepo.FindAll();
 
+            result = result.Where(x => x.Deleted == false);
+
             return result;
         }
 
@@ -328,12 +378,14 @@ namespace APIACMS.Services
         {
             var result = _registeredClassRepo.FindByCondition(expression);
 
+            result = result.Where(x => x.Deleted == false);
+
             return result;
         }
 
         public RegistredClass GetRegistredClassWithExpressionAndFkData(Guid id)
         {
-            var result = _registeredClassRepo.FindByConditionWithFKData(x => x.RegistredClassId == id);
+            var result = _registeredClassRepo.FindByConditionWithFKData(x => x.RegistredClassId == id && x.Deleted == false);
 
             return result;
         }
@@ -343,6 +395,8 @@ namespace APIACMS.Services
         {
             var result = _registeredClassRepo.FindAllByConditionWithFKData(expression);
 
+            result = result.Where(x => x.Deleted == false);
+
             return result;
         }
 
@@ -351,12 +405,16 @@ namespace APIACMS.Services
         {
             var result = _sessionScheduledRepo.FindAll();
 
+            result = result.Where(x => x.Deleted == false);
+
             return result;
         }
 
         public IQueryable<SessionSchedule> GetSessionScheduleByCondition(Expression<Func<SessionSchedule, bool>> expression)
         {
             var result = _sessionScheduledRepo.FindByCondition(expression);
+
+            result = result.Where(x => x.Deleted == false);
 
             return result;
         }
@@ -365,11 +423,14 @@ namespace APIACMS.Services
         {
             var result = _sessionScheduledRepo.FindByConditionWithFKData(expression);
 
+
             return result;
         }
         public IQueryable<SessionSchedule> GetAllSessionSchedulesWithExpressionAndFkData(Expression<Func<SessionSchedule, bool>> expression)
         {
             var result = _sessionScheduledRepo.FindAllByConditionWithFKData(expression);
+
+            result = result.Where(x => x.Deleted == false);
 
             return result;
         }
@@ -378,6 +439,8 @@ namespace APIACMS.Services
         {
             var result = _studentRepo.FindAll();
 
+            result = result.Where(x => x.Deleted == false);
+
             return result;
         }
 
@@ -385,12 +448,14 @@ namespace APIACMS.Services
         {
             var result = _studentRepo.FindByCondition(expression);
 
+            result = result.Where(x => x.Deleted == false);
+
             return result;
         }
 
         public Student GetStudentsWithExpressionAndFkData(Guid id)
         {
-            var result = _studentRepo.FindByConditionWithFKData(x => x.StudentId == id);
+            var result = _studentRepo.FindByConditionWithFKData(x => x.StudentId == id && x.Deleted == false);
 
             return result;
         }
@@ -399,6 +464,8 @@ namespace APIACMS.Services
         {
             var result = _teacherRepo.FindAll();
 
+            result = result.Where(x => x.Deleted == false);
+
             return result;
         }
 
@@ -406,12 +473,14 @@ namespace APIACMS.Services
         {
             var result = _teacherRepo.FindByCondition(expression);
 
+            result = result.Where(x => x.Deleted == false);
+
             return result;
         }
 
         public Teacher GetTeacherWithExpressionAndFkData(Guid id)
         {
-            var result = _teacherRepo.FindByConditionWithFKData(x => x.TeacherId == id);
+            var result = _teacherRepo.FindByConditionWithFKData(x => x.TeacherId == id && x.Deleted == false);
 
             return result;
         }

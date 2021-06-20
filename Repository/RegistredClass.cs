@@ -37,7 +37,7 @@ namespace APIACMS.Repository
                 .Include(x => x.Student).ThenInclude(x => x.User)
                 .Include(x => x.PaidSession)
                 .AsNoTracking()
-                .Where(expression)
+                .Where(expression).Where(x =>x.Category.Deleted == false && x.Class.Deleted == false)
                 ;
         }
     }

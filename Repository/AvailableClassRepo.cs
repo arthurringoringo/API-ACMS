@@ -25,7 +25,7 @@ namespace APIACMS.Repository
                 .Include(d => d.RegistredClasses)
                 .Include(d => d.SessionSchedules)
                 .Include(d => d.Teacher)
-                .ThenInclude(d => d.User)
+                .ThenInclude(d => d.User).Where(x=> x.Deleted ==false)
                 .Where(expression)
                 .AsNoTracking()
                 .FirstOrDefault();
@@ -34,6 +34,7 @@ namespace APIACMS.Repository
         {
             return _context.Set<AvailableClass>()
                 .Include(d => d.Teacher)
+                .Where(d => d.Deleted == false)
                 .AsNoTracking()
                 .ToList();
         }
